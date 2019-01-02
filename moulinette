@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+
+
+import sys
+
+
+# Helper
+
+
+def print_help():
+    print("USAGE:", "\n")
+    print("\t./moulinette file_responses.txt email_list.txt folder", "\n")
+    print("By web@cadémie Strasbourg ❤️")
+
+
+def core():
+    print("slaut")
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print_help()
