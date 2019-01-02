@@ -1,6 +1,7 @@
 # W@c
 *.eu
 email_list.txt
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
