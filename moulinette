@@ -8,6 +8,7 @@ import os
 class Units:
     project_folder = ""
     project_file = ""
+    unit_args = []
     unit_test = {}
 
     def __init__(self, filename):
@@ -21,19 +22,27 @@ class Units:
         self.project_file = self.file[1].split("files=")[1]
 
         for i in range(0, len(self.file)):
-            if self.file[i].find("args=") == 0:
+            if self.file[i].find("args=") == 0 and self.file[i + 1] == "START":
                 arg = self.file[i].split("args=")[1]
+                self.unit_args.append(arg)
                 self.unit_test[arg] = []
+                i += 2
+                output = ""
                 while self.file[i] != "END":
-                    self.unit_test[arg] = self.file[i]
+                    if self.file[i] == "#-#-#-#-#-#":
+                        self.unit_test[arg].append(output)
+                        output = ""
+                    else:
+                        output += self.file[i]
                     i += 1
 
+        for args in self.unit_args:
+            for elem in self.unit_test[args]:
+                print(elem)
+            print("--------")
         print(self.unit_test)
-
-        print("")
         print(self.project_folder)
         print(self.project_file)
-
 
 
 class Student:
