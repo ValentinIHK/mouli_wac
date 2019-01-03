@@ -1,0 +1,99 @@
+project_name=Piscine_PHP_Colle1
+files=Colle1.php
+
+##1
+args=5,3
+o---o
+|   |
+o---o
+#-#-#-#-#-#
+/***\
+*   *
+\***/
+#-#-#-#-#-#
+ABBBA
+B   B
+CBBBC
+#-#-#-#-#-#
+ABBBC
+B   B
+ABBBC
+END
+
+##2
+args=5,1
+START
+o---o
+#-#-#-#-#-#
+*****
+#-#-#-#-#-#
+BBBBB
+#-#-#-#-#-#
+BBBBB
+
+END
+
+##3
+args=1,1
+START
+o
+#-#-#-#-#-#
+*
+#-#-#-#-#-#
+B
+#-#-#-#-#-#
+B
+
+END
+
+##4
+args=1,5
+START
+o
+|
+|
+|
+o
+#-#-#-#-#-#
+*
+*
+*
+*
+*
+#-#-#-#-#-#
+B
+B
+B
+B
+B
+#-#-#-#-#-#
+B
+B
+B
+B
+B
+END
+
+##5
+args=4,4
+START
+o--o
+|  |
+|  |
+o--o
+#-#-#-#-#-#
+/**\
+*  *
+*  *
+\**/
+#-#-#-#-#-#
+ABBA
+B  B
+B  B
+CBBC
+#-#-#-#-#-#
+ABBC
+B  B
+B  B
+ABBC
+END

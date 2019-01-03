@@ -2,6 +2,65 @@
 
 
 import sys
+import os
+
+
+class Units:
+    project_folder = ""
+    project_file = ""
+    unit_test = {}
+
+    def __init__(self, filename):
+        self.filename = filename
+        fp = open(filename, "r")
+        self.file = fp.read().split("\n")
+        fp.close()
+
+    def parse_file(self):
+        self.project_folder = self.file[0].split("project_name=")[1]
+        self.project_file = self.file[1].split("files=")[1]
+
+        for i in range(0, len(self.file)):
+            if self.file[i].find("args=") == 0:
+                arg = self.file[i].split("args=")[1]
+                self.unit_test[arg] = []
+                while self.file[i] != "END":
+                    self.unit_test[arg] = self.file[i]
+                    i += 1
+
+        print(self.unit_test)
+
+        print("")
+        print(self.project_folder)
+        print(self.project_file)
+
+
+
+class Student:
+    def __init__(self, folder):
+        self.folder = folder
+        self.mark = 0
+
+    def open_folder(self):
+        print(self.folder)
+
+    def correction(self):
+        print(self.folder)
+        print("Final mark :", self.mark, "\n")
+
+
+# Core
+
+
+def core():
+    path = sys.argv[2]
+
+    units = Units(sys.argv[1])
+    units.parse_file()
+
+    folders = os.listdir(path)
+    for name in folders:
+        student = Student(name)
 
 
 # Helper
@@ -9,14 +68,13 @@ import sys
 
 def print_help():
     print("USAGE:", "\n")
-    print("\t./moulinette file_responses.txt email_list.txt folder", "\n")
-    print("By web@cadémie Strasbourg ❤️")
-
-
-def core():
-    print("slaut")
+    print("\t./moulinette file_responses.txt folder", "\n")
+    print("Made by web@cadémie Strasbourg ❤️")
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
+    if len(sys.argv) == 3:
+        core()
+    else:
         print_help()
+
