@@ -3,6 +3,7 @@
 
 import sys
 import os
+import subprocess
 
 
 class Units:
@@ -10,6 +11,7 @@ class Units:
     project_file = ""
     unit_args = []
     unit_test = {}
+    arguments_to_binary = []
 
     def __init__(self, filename):
         self.filename = filename
@@ -20,6 +22,7 @@ class Units:
     def parse_file(self):
         self.project_folder = self.file[0].split("project_name=")[1]
         self.project_file = self.file[1].split("files=")[1]
+        self.arguments_to_binary = self.file[2].split("arguments_to_binary=")[1].split(',')
 
         for i in range(0, len(self.file)):
             if self.file[i].find("args=") == 0 and self.file[i + 1] == "START":
@@ -36,14 +39,6 @@ class Units:
                         output += self.file[i]
                     i += 1
 
-        for args in self.unit_args:
-            for elem in self.unit_test[args]:
-                print(elem)
-            print("--------")
-        print(self.unit_test)
-        print(self.project_folder)
-        print(self.project_file)
-
 
 class Student:
     def __init__(self, folder):
@@ -58,6 +53,50 @@ class Student:
         print("Final mark :", self.mark, "\n")
 
 
+class Algo:
+    file_path = ""
+
+    def __init__(self, student, units, folder):
+        self.student = student
+        self.units = units
+        self.folder = folder
+
+    def start_units(self):
+        if os.path.isdir(self.folder + "/" + self.units.project_folder):
+            folders = os.listdir(self.folder + "/" + self.units.project_folder)
+            self.file_path = self.folder + "/" + self.units.project_folder + "/" + self.units.project_file
+            if os.path.isfile(self.file_path):
+                for elem in folders:
+                    if elem == self.units.project_file:
+                        self.have_fun(elem)
+            else:
+                print("No such file:", self.units.project_file)
+        else:
+            print("No such directory:", self.units.project_folder)
+            return
+
+    def have_fun(self, elem):
+        arglist = ""
+        for args in self.units.arguments_to_binary:
+            arglist += " " + args
+        try:
+            print(self.file_path)
+            binary1 = "php " + self.file_path + " " + arglist
+            #binary2 = "php " + sys.argv[3] + " " + arglist
+            try:
+                output1 = subprocess.Popen([binary1], stdout=subprocess.PIPE, shell=True).communicate()[0].decode(
+                    'ascii').split('\n')
+                print(output1)
+
+            except subprocess.CalledProcessError:
+                exit(84)
+
+            print("No errors. Well done !")
+        except IOError:
+            print("An error has occured during tests")
+            exit(84)
+
+
 # Core
 
 
@@ -68,8 +107,13 @@ def core():
     units.parse_file()
 
     folders = os.listdir(path)
-    for name in folders:
-        student = Student(name)
+    for i in range(1, 2):
+        student = Student(folders[i])
+        print(folders[i])
+        algo = Algo(student, units, "Rendu/" + folders[i])
+        algo.start_units()
+        print("Finale mark =>", student.mark)
+        print("")
 
 
 # Helper
@@ -77,12 +121,12 @@ def core():
 
 def print_help():
     print("USAGE:", "\n")
-    print("\t./moulinette file_responses.txt folder", "\n")
+    print("\t./moulinette file_responses.txt folder main.php", "\n")
     print("Made by web@cadémie Strasbourg ❤️")
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 4:
         core()
     else:
         print_help()

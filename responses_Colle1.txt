@@ -1,5 +1,6 @@
-project_name=Piscine_PHP_Colle1
-files=Colle1.php
+project_name=Piscine_PHP_Colle_1
+files=Colle_1.php
+arguments_to_binary=
 
 ##1
 args=5,3
