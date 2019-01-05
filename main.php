@@ -6,30 +6,24 @@ define
 
 try
 {
-    var_dump($argv);
-    if (file_exists($f = 'Rendu/alex.murgoci@epitech.eu/Piscine_PHP_Exam_1/ex_02.php') && is_file($f) && is_readable($f))
-
-    {
+    if (file_exists($f = $argv[1]) && is_file($f) && is_readable($f)) {
         require_once($f);
+        if (function_exists($f = 'colle')) {
+            $tab = [[5,3], [5,1], [1,1], [1, 5], [4,4]];
 
-        if (function_exists($f = 'rev_epur_str'))
 
-        {
-            $tab = ["                                                     ",
-                "     @       mon amis l'     {       }       oiseau  ",
-                "qui" => "ne    sait pas tres     bien voler          ",
-                "    n'est    []      pas un    poisson       volant \",
-                  "];
-            ob_start();
-            foreach ($tab as $v)
-                var_dump(rev_epur_str($v));
-            var_dump(rev_epur_str(''));
-            var_dump(rev_epur_str());
-            var_dump($tab);
-            if (ob_get_clean() === file_get_contents('./result'))
-                throw new Exception("Le resultat de votre fonction semble correct.\n");
-            else
-                throw new Exception("Le resultat de votre fonction est incorrect.\n");
+            foreach ($tab as $v) {
+                ob_start();
+                colle($v[0], $v[1]);
+                $obj = ob_get_clean();
+                ob_end_clean();
+                $result = explode("\n", $obj);
+                $c = '';
+                for ($i = 0; $i < sizeof($result) -1; $i++) {
+                    $c .= $result[$i];
+                }
+                echo $c . "\n";
+            }
         }
         else
             throw new Exception("La fonction $f n'existe pas !\n");

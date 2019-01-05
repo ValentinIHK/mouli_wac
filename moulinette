@@ -10,7 +10,8 @@ class Units:
     project_folder = ""
     project_file = ""
     unit_args = []
-    unit_test = {}
+    unit_test = []
+    unit_lol = []
     arguments_to_binary = []
 
     def __init__(self, filename):
@@ -28,16 +29,17 @@ class Units:
             if self.file[i].find("args=") == 0 and self.file[i + 1] == "START":
                 arg = self.file[i].split("args=")[1]
                 self.unit_args.append(arg)
-                self.unit_test[arg] = []
                 i += 2
                 output = ""
+                unit_lol = []
                 while self.file[i] != "END":
                     if self.file[i] == "#-#-#-#-#-#":
-                        self.unit_test[arg].append(output)
+                        unit_lol.append(output)
                         output = ""
                     else:
                         output += self.file[i]
                     i += 1
+                self.unit_test.append(unit_lol)
 
 
 class Student:
@@ -80,18 +82,21 @@ class Algo:
         for args in self.units.arguments_to_binary:
             arglist += " " + args
         try:
-            print(self.file_path)
-            binary1 = "php " + self.file_path + " " + arglist
-            #binary2 = "php " + sys.argv[3] + " " + arglist
+            binary1 = "php " + "main.php " + self.file_path + arglist
             try:
                 output1 = subprocess.Popen([binary1], stdout=subprocess.PIPE, shell=True).communicate()[0].decode(
                     'ascii').split('\n')
-                print(output1)
+
+                for i in range(0, len(self.units.unit_test)):
+                    found = False
+                    for k in range(0, len(self.units.unit_test[i])):
+                        for j in range(0, len(output1) - 1):
+                            if self.units.unit_test[i][k] == output1[j] and not found:
+                                found = True
+                                self.student.mark += 1
 
             except subprocess.CalledProcessError:
                 exit(84)
-
-            print("No errors. Well done !")
         except IOError:
             print("An error has occured during tests")
             exit(84)
@@ -107,12 +112,13 @@ def core():
     units.parse_file()
 
     folders = os.listdir(path)
-    for i in range(1, 2):
+    for i in range(25, 26):
         student = Student(folders[i])
         print(folders[i])
         algo = Algo(student, units, "Rendu/" + folders[i])
         algo.start_units()
-        print("Finale mark =>", student.mark)
+        print("Finale mark =>", student.mark, end="")
+        print("/5")
         print("")
 
 
